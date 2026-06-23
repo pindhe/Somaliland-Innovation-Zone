@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { GraduationCap, Menu, X } from 'lucide-react';
 import { useState } from 'react';
-import { ThemeToggle } from './ThemeToggle';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
