@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+
+# Build
+.next/
+out/
+build/
+dist/
+staticfiles/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Django
+media/
+*.log
+db.sqlite3
+
+# Env
+.env.local
+backend/.env
+
+# Misc
+*.pem

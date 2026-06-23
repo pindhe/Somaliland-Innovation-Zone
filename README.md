@@ -1,301 +1,132 @@
-# 🚀 SIZSR – Somaliland Innovation Zone Student Registration System
-
-<div align="center">
-
-### Empowering Innovation Through Digital Student Registration
-
-A modern student registration and training management platform designed for **Somaliland Innovation Zone (SIZ)**.
-
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-![Flutter](https://img.shields.io/badge/Flutter-Mobile_App-02569B?logo=flutter)
-![PHP](https://img.shields.io/badge/PHP-Backend-777BB4?logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?logo=mysql)
-![Status](https://img.shields.io/badge/Status-Active-success)
-
-</div>
-
----
-
-## 📖 Overview
-
-**SIZSR (Somaliland Innovation Zone Student Registration System)** is a digital platform developed to streamline the student application and training registration process at Somaliland Innovation Zone.
-
-The system allows administrators to publish training programs, bootcamps, workshops, and innovation events while enabling students to easily browse opportunities, submit applications, and track their application status in real time.
-
----
-
-## 🎯 Project Goals
-
-* Digitize student registration processes.
-* Simplify training program applications.
-* Improve communication between students and administrators.
-* Manage applications efficiently.
-* Generate reports and analytics.
-* Provide a scalable platform for future growth.
-
----
-
-## 👥 System Users
-
-### 🎓 Students
-
-Students can:
-
-* Create an account
-* Login securely
-* View available trainings
-* Apply for programs
-* Upload required documents
-* Track application status
-* Receive notifications
-* Manage profile information
-
-### 👨‍💼 Administrators
-
-Administrators can:
-
-* Create training programs
-* Manage applications
-* Review student submissions
-* Approve or reject applicants
-* Send notifications
-* Generate reports
-* Monitor system activities
-
----
-
-## ✨ Features
-
-### Student Mobile Application
-
-* User Registration
-* Secure Login
-* Training Program Listing
-* Online Applications
-* Application Status Tracking
-* Notifications
-* Profile Management
-
-### Admin Web Dashboard
-
-* Dashboard Analytics
-* Student Management
-* Program Management
-* Application Management
-* Notification Management
-* Report Generation
-* System Settings
-
----
-
-## 🏗️ System Workflow
-
-### 1️⃣ Admin Creates a Program
-
-The administrator publishes:
-
-* Training Title
-* Description
-* Requirements
-* Duration
-* Deadline
-* Available Seats
-
-### 2️⃣ Student Applies
-
-Students:
-
-* View available opportunities
-* Read requirements
-* Submit application
-* Upload required documents
-
-### 3️⃣ Application Review
-
-Administrators review:
-
-* Student Profile
-* CV
-* Certificates
-* Application Details
-
-### 4️⃣ Decision
-
-Applications can be:
-
-* ✅ Approved
-* ❌ Rejected
-* ⏳ Pending Review
-
-### 5️⃣ Notification
-
-Students receive updates directly through the system.
-
----
-
-## 🗄️ Database Structure
-
-### Students
-
-Stores student information.
-
-### Admins
-
-Stores administrator accounts.
-
-### Programs
-
-Stores training and course information.
-
-### Applications
-
-Stores student applications.
-
-### Notifications
-
-Stores messages and updates.
-
-### Settings
-
-Stores platform configurations.
-
----
-
-## 🛠️ Technology Stack
-
-### Mobile Application
-
-* Flutter
-* Dart
-
-### Backend API
-
-* PHP REST API
-
-### Database
-
-* MySQL
-
-### Development Environment
-
-* XAMPP
-* Visual Studio Code
-* Android Studio
-
----
-
-## 🔐 Security Features
-
-* Password Hashing
-* Input Validation
-* Secure Authentication
-* Role-Based Access Control
-* Protected API Endpoints
-* SQL Injection Prevention
-
----
-
-## 📊 Future Enhancements
-
-* AI Assistant
-* SMS Notifications
-* Email Verification
-* Certificate Generator
-* Interview Scheduling
-* Attendance Tracking
-* Analytics Dashboard
-* Multi-Language Support
-
----
-
-## 📱 Platforms Supported
-
-* Android
-* iOS
-* Web Dashboard
-* Desktop Browser
-
----
-
-## 📷 Screenshots
-
-Add project screenshots here:
+# SIZSR – Somaliland Innovation Zone Student Registration System
+
+A modern, production-ready student registration and training management platform built with **Next.js**, **Django REST Framework**, and **PostgreSQL**.
+
+## Features
+
+### Student Portal
+- Modern responsive home page with hero, featured programs, and categories
+- Course browsing with search and filters
+- Detailed course pages with learning outcomes and requirements
+- Multi-step application form (5 steps)
+- Success confirmation page with animations
+
+### Admin Panel
+- Secure JWT authentication with forgot password
+- Analytics dashboard with charts and statistics
+- Full course management (CRUD, publish, archive)
+- Application review (approve/reject, notes, export CSV)
+- Email notification system
+
+### Technical
+- React/Next.js 14 frontend with Tailwind CSS
+- Django REST API with JWT auth
+- PostgreSQL database
+- Dark mode support
+- Docker deployment ready
+- Responsive design (mobile, tablet, desktop)
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 14, React 18, Tailwind CSS, Framer Motion, Recharts |
+| Backend | Django 5, Django REST Framework, SimpleJWT |
+| Database | PostgreSQL 16 |
+| Deployment | Docker, Gunicorn |
+
+## Quick Start
+
+### Prerequisites
+- Node.js 20+
+- Python 3.12+
+- PostgreSQL 16+
+
+### 1. Database Setup
 
 ```bash
-/screenshots/login.png
-/screenshots/dashboard.png
-/screenshots/programs.png
-/screenshots/applications.png
+# Create PostgreSQL database
+createdb sizsr
 ```
 
----
-
-## 🚀 Installation
-
-### Clone Repository
+### 2. Backend Setup
 
 ```bash
-git clone https://github.com/yourusername/SIZSR.git
+cd backend
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+
+# macOS/Linux
+source venv/bin/activate
+
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your database credentials
+
+python manage.py migrate
+python manage.py seed_data
+python manage.py runserver
 ```
 
-### Move Into Project
+Default admin credentials: **admin** / **admin123**
+
+### 3. Frontend Setup
 
 ```bash
-cd SIZSR
+cd frontend
+npm install
+cp .env.local.example .env.local
+npm run dev
 ```
 
-### Configure Database
+Open [http://localhost:3000](http://localhost:3000) for the student portal.
+Open [http://localhost:3000/admin/login](http://localhost:3000/admin/login) for the admin panel.
 
-Import:
+### Docker (Alternative)
 
 ```bash
-database.sql
+docker-compose up --build
 ```
 
-into MySQL using XAMPP.
+## API Endpoints
 
-### Configure Backend
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login/` | Admin login |
+| GET | `/api/courses/` | List courses |
+| GET | `/api/courses/featured/` | Featured courses |
+| POST | `/api/applications/` | Submit application |
+| GET | `/api/dashboard/stats/` | Dashboard analytics |
+| GET | `/api/applications/export/` | Export CSV |
 
-Update:
+## Project Structure
 
-```php
-config.php
+```
+SIZSR/
+├── backend/
+│   ├── config/          # Django settings
+│   ├── users/           # Auth & admin model
+│   ├── courses/         # Course management
+│   ├── applications/    # Application handling
+│   └── notifications/   # Email notifications
+├── frontend/
+│   └── src/
+│       ├── app/         # Next.js pages
+│       ├── components/  # UI components
+│       ├── contexts/    # Auth & theme
+│       └── lib/         # API client & utils
+└── docker-compose.yml
 ```
 
-with your database credentials.
+## Color Palette
 
-### Run Flutter App
+- **Primary Blue**: `#2563eb` – buttons, links, accents
+- **Accent Green**: `#22c55e` – success, free training badges
+- **White / Light Gray**: backgrounds and cards
+- **Glassmorphism**: frosted glass card effects
 
-```bash
-flutter pub get
-flutter run
-```
+## License
 
----
-
-## 🤝 Contribution
-
-Contributions, feature requests, and suggestions are welcome.
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-<div align="center">
-
-### 🇸🇴 Built for Somaliland Innovation Zone
-
-Empowering Students • Encouraging Innovation • Building the Future
-
-⭐ Star this repository if you find it useful.
-
-</div>
+MIT License – Built for Somaliland Innovation Zone.
