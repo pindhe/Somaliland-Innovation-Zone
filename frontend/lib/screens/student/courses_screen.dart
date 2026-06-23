@@ -6,6 +6,8 @@ import '../../services/api_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/common_widgets.dart';
 
+import '../../widgets/student_navbar.dart';
+
 class CoursesScreen extends StatefulWidget {
   const CoursesScreen({super.key});
 
@@ -51,7 +53,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
     final cols = width > 900 ? 3 : width > 600 ? 2 : 1;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Available Courses'), leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => context.go('/'))),
+      appBar: const StudentNavbar(title: 'Available Courses', showBack: true),
       body: Column(
         children: [
           Padding(

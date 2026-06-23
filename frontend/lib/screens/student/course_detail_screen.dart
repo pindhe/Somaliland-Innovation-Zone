@@ -8,6 +8,8 @@ import '../../services/api_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/common_widgets.dart';
 
+import '../../widgets/student_navbar.dart';
+
 class CourseDetailScreen extends StatefulWidget {
   final int courseId;
   const CourseDetailScreen({super.key, required this.courseId});
@@ -38,16 +40,18 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     if (loading) return const Scaffold(body: LoadingView());
     if (course == null) {
       return Scaffold(
-        appBar: AppBar(),
+        appBar: const StudentNavbar(title: 'Course', showBack: true),
         body: const EmptyStateWidget(title: 'Course not found', description: 'This course may no longer be available.'),
       );
     }
 
     final c = course!;
     final isWide = MediaQuery.sizeOf(context).width > 800;
+    final palette = context.palette;
 
     return Scaffold(
-      appBar: AppBar(title: Text(c.title, maxLines: 1, overflow: TextOverflow.ellipsis)),
+      backgroundColor: palette.background,
+      appBar: StudentNavbar(title: c.title, showBack: true),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: isWide

@@ -7,6 +7,8 @@ import '../../services/api_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/common_widgets.dart';
 
+import '../../widgets/student_navbar.dart';
+
 class ApplicationFormScreen extends StatefulWidget {
   final int courseId;
   const ApplicationFormScreen({super.key, required this.courseId});
@@ -71,7 +73,8 @@ class _ApplicationFormScreenState extends State<ApplicationFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Application Form')),
+      backgroundColor: context.palette.background,
+      appBar: const StudentNavbar(title: 'Application Form', showBack: true),
       body: Column(
         children: [
           Padding(
