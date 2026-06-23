@@ -4,6 +4,61 @@ import 'package:provider/provider.dart';
 import '../config/theme.dart';
 import '../providers/app_providers.dart';
 import '../services/api_service.dart';
+
+class SizsrApp extends StatefulWidget {
+  const SizsrApp({super.key});
+
+  @override
+  State<SizsrApp> createState() => _SizsrAppState();
+}
+
+class _SizsrAppState extends State<SizsrApp> {
+  late final ApiService _api;
+  late final AuthProvider _auth;
+  late final ThemeProvider _theme;
+
+  @override
+  void initState() {
+    super.initState();
+    _api = ApiService();
+    _auth = AuthProvider(_api)..init();
+    _theme = ThemeProvider()..init();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        Provider<ApiService>.value(value: _api),
+        ChangeNotifierProvider<ThemeProvider>.value(value: _theme),
+        ChangeNotifierProvider<AuthProvider>.value(value: _auth),
+      ],
+      child: Consumer2<ThemeProvider, AuthProvider>(
+        builder: (context, theme, auth, _) {
+          if (!theme.initialized || auth.loading) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.light(),
+              darkTheme: AppTheme.dark(),
+              home: const Scaffold(body: Center(child: CircularProgressIndicator())),
+            );
+          }
+          return MaterialApp.router(
+            title: 'SIZSR',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.light(),
+            darkTheme: AppTheme.dark(),
+            themeMode: theme.mode,
+            routerConfig: createRouter(auth),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Router defined below imports
+import 'package:go_router/go_router.dart';
 import 'screens/student/home_screen.dart';
 import 'screens/student/courses_screen.dart';
 import 'screens/student/course_detail_screen.dart';
@@ -58,29 +113,3 @@ GoRouter createRouter(AuthProvider auth) => GoRouter(
         GoRoute(path: '/admin/notifications', builder: (_, __) => const NotificationsScreen()),
       ],
     );
-
-class SizsrApp extends StatelessWidget {
-  const SizsrApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final api = ApiService();
-    return MultiProvider(
-      providers: [
-        Provider<ApiService>.value(value: api),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => AuthProvider(api)..init()),
-      ],
-      child: Consumer2<ThemeProvider, AuthProvider>(
-        builder: (context, theme, auth, _) => MaterialApp.router(
-          title: 'SIZSR',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light(),
-          darkTheme: AppTheme.dark(),
-          themeMode: theme.mode,
-          routerConfig: createRouter(auth),
-        ),
-      ),
-    );
-  }
-}
