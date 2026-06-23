@@ -36,22 +36,11 @@ services:
       - DB_NAME=sizsr
       - DB_USER=postgres
       - DB_PASSWORD=postgres
-      - CORS_ALLOWED_ORIGINS=http://localhost:3000
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8080,http://localhost:5000
       - FRONTEND_URL=http://localhost:3000
     depends_on:
       db:
         condition: service_healthy
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
-    depends_on:
-      - backend
 
 volumes:
   postgres_data:

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 const courseCategories = [
   'Programming',
   'Web Development',

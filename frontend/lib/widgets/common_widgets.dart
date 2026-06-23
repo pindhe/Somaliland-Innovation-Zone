@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../config/theme.dart';
 import '../models/course.dart';
+import '../utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class CourseCard extends StatelessWidget {
