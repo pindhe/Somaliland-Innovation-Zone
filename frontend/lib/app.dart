@@ -103,6 +103,7 @@ class _SizsrAppState extends State<SizsrApp> {
             theme: AppTheme.light(),
             darkTheme: AppTheme.dark(),
             themeMode: theme.mode,
+            themeAnimationDuration: Duration.zero,
             routerConfig: createRouter(auth),
           );
         },

@@ -130,6 +130,13 @@ CORS_ALLOWED_ORIGINS = config(
     default='http://localhost:3000',
     cast=Csv(),
 )
+# Flutter web uses random localhost ports — allow any local dev origin in DEBUG
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^http://localhost:\d+$',
+    r'^http://127\.0\.0\.1:\d+$',
+]
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=True, cast=bool)
 CORS_ALLOW_CREDENTIALS = True
 
 EMAIL_BACKEND = config(

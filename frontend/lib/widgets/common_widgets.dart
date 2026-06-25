@@ -12,6 +12,7 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -113,8 +114,8 @@ class StatCard extends StatelessWidget {
               child: Icon(icon, color: color, size: 22),
             ),
             const SizedBox(height: 12),
-            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
-            Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+            Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: context.palette.textPrimary)),
+            Text(label, style: TextStyle(color: context.palette.textSecondary, fontSize: 13)),
           ],
         ),
       ),
@@ -131,17 +132,18 @@ class EmptyStateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 56, color: AppColors.textSecondary),
+            Icon(icon, size: 56, color: palette.textSecondary),
             const SizedBox(height: 16),
-            Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: palette.textPrimary)),
             const SizedBox(height: 8),
-            Text(description, textAlign: TextAlign.center, style: const TextStyle(color: AppColors.textSecondary)),
+            Text(description, textAlign: TextAlign.center, style: TextStyle(color: palette.textSecondary)),
           ],
         ),
       ),

@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../../models/application.dart';
 import '../../models/course.dart';
 import '../../services/api_service.dart';
+import '../../config/theme.dart';
 import '../../utils/constants.dart';
-import '../../widgets/common_widgets.dart';
 
 import '../../widgets/student_navbar.dart';
 

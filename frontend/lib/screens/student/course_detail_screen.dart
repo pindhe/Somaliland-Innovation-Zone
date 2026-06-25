@@ -58,7 +58,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             ? Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(flex: 2, child: _mainContent(c)),
+                  Expanded(flex: 2, child: _mainContent(context, c)),
                   const SizedBox(width: 24),
                   SizedBox(width: 320, child: _sidebar(context, c)),
                 ],
@@ -66,7 +66,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _mainContent(c),
+                  _mainContent(context, c),
                   const SizedBox(height: 20),
                   _sidebar(context, c),
                 ],
@@ -75,7 +75,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
     );
   }
 
-  Widget _mainContent(Course c) => Column(
+  Widget _mainContent(BuildContext context, Course c) {
+    final palette = context.palette;
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
@@ -94,9 +96,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             Chip(label: Text(c.isFree ? 'Free Training' : 'Paid Course'), backgroundColor: c.isFree ? AppColors.accent.withValues(alpha: 0.15) : null),
           ]),
           const SizedBox(height: 12),
-          Text(c.title, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+          Text(c.title, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: palette.textPrimary)),
           const SizedBox(height: 12),
-          Text(c.description, style: const TextStyle(height: 1.6, color: AppColors.textSecondary)),
+          Text(c.description, style: TextStyle(height: 1.6, color: palette.textSecondary)),
           if (c.outcomeList.isNotEmpty) ...[
             const SizedBox(height: 24),
             const Text('Learning Outcomes', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
@@ -124,6 +126,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
           ],
         ],
       );
+  }
 
   Widget _sidebar(BuildContext context, Course c) => Card(
         child: Padding(
@@ -133,10 +136,10 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
             children: [
               const Text('Course Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
               const SizedBox(height: 16),
-              _detail(Icons.person_outline, 'Instructor', c.instructor),
-              _detail(Icons.schedule, 'Duration', c.duration),
-              _detail(Icons.calendar_today, 'Dates', '${formatDate(c.startDate)} – ${formatDate(c.endDate)}'),
-              _detail(Icons.people_outline, 'Seats', '${c.seatsAvailable} of ${c.seats} available'),
+              _detail(context, Icons.person_outline, 'Instructor', c.instructor),
+              _detail(context, Icons.schedule_outlined, 'Duration', c.duration),
+              _detail(context, Icons.calendar_today_outlined, 'Dates', '${formatDate(c.startDate)} – ${formatDate(c.endDate)}'),
+              _detail(context, Icons.people_outline, 'Seats', '${c.seatsAvailable} of ${c.seats} available'),
               const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
@@ -150,7 +153,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
         ),
       );
 
-  Widget _detail(IconData icon, String label, String value) => Padding(
+  Widget _detail(BuildContext context, IconData icon, String label, String value) {
+    final palette = context.palette;
+    return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,12 +166,13 @@ class _CourseDetailScreenState extends State<CourseDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
-                  Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  Text(label, style: TextStyle(fontSize: 12, color: palette.textSecondary)),
+                  Text(value, style: TextStyle(fontWeight: FontWeight.w600, color: palette.textPrimary)),
                 ],
               ),
             ),
           ],
         ),
       );
+  }
 }
