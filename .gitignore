@@ -1,40 +1,10 @@
-# Dependencies
-node_modules/
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-.venv/
-env/
+# Environment secrets
 .env
 
-# Build
-.next/
-out/
-build/
-dist/
-staticfiles/
+# Uploaded files
+assets/uploads/*
+!assets/uploads/.gitkeep
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS
-.DS_Store
+# OS / editor noise
 Thumbs.db
-
-# Django
-media/
-*.log
-db.sqlite3
-
-# Env
-.env.local
-backend/.env
-
-# Misc
-*.pem
+.DS_Store
