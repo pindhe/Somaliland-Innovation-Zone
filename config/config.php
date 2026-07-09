@@ -9,7 +9,7 @@ declare(strict_types=1);
 // ---------------------------------------------------------------------------
 // Error reporting (set DEBUG to false in production)
 // ---------------------------------------------------------------------------
-define('SIZSR_DEBUG', true);
+define('SIZSR_DEBUG', filter_var(getenv('SIZSR_DEBUG') ?: 'true', FILTER_VALIDATE_BOOLEAN));
 
 if (SIZSR_DEBUG) {
     error_reporting(E_ALL);

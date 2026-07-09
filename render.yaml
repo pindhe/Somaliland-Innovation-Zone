@@ -1,0 +1,31 @@
+# Optional Render Blueprint — import at https://dashboard.render.com/blueprints
+# MySQL must be created separately (e.g. Railway) and env vars filled in.
+services:
+  - type: web
+    name: sizsr
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: SIZSR_DEBUG
+        value: "false"
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: WHATSAPP_ENABLED
+        value: "true"
+      - key: WHATSAPP_API_VERSION
+        value: v21.0
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: WHATSAPP_DEFAULT_COUNTRY_CODE
+        value: "252"

@@ -1,23 +1,24 @@
 <?php
 /**
  * SIZSR - Database connection (PDO Singleton)
+ * Reads credentials from environment variables on Render/production;
+ * falls back to XAMPP defaults for local development.
  */
 
 declare(strict_types=1);
 
 final class Database
 {
-    private const DB_HOST = '127.0.0.1';
-    private const DB_PORT = '3306';
-    private const DB_NAME = 'sizsr_db';
-    private const DB_USER = 'root';
-    private const DB_PASS = '';
-    private const DB_CHARSET = 'utf8mb4';
-
     private static ?PDO $instance = null;
 
     private function __construct() {}
     private function __clone() {}
+
+    private static function cfg(string $key, string $default): string
+    {
+        $env = getenv($key);
+        return ($env !== false && $env !== '') ? (string)$env : $default;
+    }
 
     public static function getConnection(): PDO
     {
@@ -25,13 +26,14 @@ final class Database
             return self::$instance;
         }
 
-        $dsn = sprintf(
-            'mysql:host=%s;port=%s;dbname=%s;charset=%s',
-            self::DB_HOST,
-            self::DB_PORT,
-            self::DB_NAME,
-            self::DB_CHARSET
-        );
+        $host = self::cfg('DB_HOST', '127.0.0.1');
+        $port = self::cfg('DB_PORT', '3306');
+        $name = self::cfg('DB_NAME', 'sizsr_db');
+        $user = self::cfg('DB_USER', 'root');
+        $pass = self::cfg('DB_PASS', '');
+        $charset = self::cfg('DB_CHARSET', 'utf8mb4');
+
+        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=%s', $host, $port, $name, $charset);
 
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -41,7 +43,7 @@ final class Database
         ];
 
         try {
-            self::$instance = new PDO($dsn, self::DB_USER, self::DB_PASS, $options);
+            self::$instance = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
             if (defined('SIZSR_DEBUG') && SIZSR_DEBUG) {
                 die('Database connection failed: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES));
@@ -53,7 +55,6 @@ final class Database
         return self::$instance;
     }
 }
-
 /**
  * Shorthand helper to get the shared PDO instance.
  */
