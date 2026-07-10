@@ -10,7 +10,7 @@ Built with **PHP 8+ (OOP + PDO)**, **MySQL/MariaDB**, **Tailwind CSS**,
 ---
 
 <p align="center">
-  <img src="Screenshot 2026-05-07 205752.png" width="900"/>
+  <img src="Screenshot 2026-07-10 173458.png" width="900"/>
 </p>
 
 ## ✨ Features
