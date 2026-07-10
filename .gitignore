@@ -1,17 +1,10 @@
-venv/
-__pycache__/
-*.py[cod]
-*.sqlite3
-db.sqlite3
+# Environment secrets
 .env
-media/
-staticfiles/
-*.log
+
+# Uploaded files
+assets/uploads/*
+!assets/uploads/.gitkeep
+
+# OS / editor noise
+Thumbs.db
 .DS_Store
-.idea/
-.vscode/
-*.egg-info/
-dist/
-build/
-.coverage
-htmlcov/
