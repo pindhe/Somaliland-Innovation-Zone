@@ -117,11 +117,16 @@ def course_list(request):
 
 def course_detail(request, slug):
     course = get_object_or_404(
-        Course.objects.prefetch_related("modules").select_related("department"),
+        Course.objects.prefetch_related("modules").select_related("department", "category"),
         slug=slug,
         status__in=[Course.Status.PUBLISHED, Course.Status.CLOSED],
     )
     apply_abs = request.build_absolute_uri(course.apply_url)
+    skill_list = [
+        s.strip()
+        for s in (course.skills or "").replace("\n", ",").split(",")
+        if s.strip()
+    ]
     return render(
         request,
         "public/course_detail.html",
@@ -129,6 +134,7 @@ def course_detail(request, slug):
             "course": course,
             "apply_abs": apply_abs,
             "share_url": request.build_absolute_uri(course.public_url),
+            "skill_list": skill_list,
         },
     )
 
