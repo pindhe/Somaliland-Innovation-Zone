@@ -5,7 +5,7 @@ from io import BytesIO
 import qrcode
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Count, Q, Sum
+from django.db.models import Count, F, Q, Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -16,7 +16,7 @@ from applications.emails import send_application_email
 from applications.forms import ApplicationForm, ApplicationStatusForm
 from applications.models import Application, ApplicationStatusHistory
 from applications.pdf import generate_application_pdf
-from core.models import Announcement
+from core.models import Announcement, SiteSettings
 from core.utils import notify_admins
 from courses.models import Course, Department
 
@@ -48,7 +48,6 @@ def home(request):
         )
 
     open_courses = [c for c in courses[:24] if c.is_open]
-    # Fall back to all filtered published if none currently "open"
     featured = open_courses or list(courses[:12])
 
     closing_soon = (
@@ -63,10 +62,22 @@ def home(request):
         .order_by("name")
     )
 
+    # Count each browser session once so the learners number grows with real traffic
+    SiteSettings.load()
+    if not request.session.get("siz_visit_counted"):
+        SiteSettings.objects.filter(pk=1).update(visit_count=F("visit_count") + 1)
+        request.session["siz_visit_counted"] = True
+        request.session.modified = True
+
+    site = SiteSettings.load()
+    applications_count = Application.objects.filter(is_draft=False).count()
+    # Real dynamic total: applications + unique home visits
+    learners_count = applications_count + (site.visit_count or 0)
+
     stats = {
         "courses": published.count(),
         "departments": departments.count(),
-        "applications": Application.objects.filter(is_draft=False).count(),
+        "applications": applications_count,
         "accepted": Application.objects.filter(
             is_draft=False, status=Application.Status.ACCEPTED
         ).count(),
@@ -83,6 +94,7 @@ def home(request):
             "closing_soon": closing_soon,
             "departments": departments,
             "stats": stats,
+            "learners_count": learners_count,
             "announcements": announcements,
             "q": q,
             "dept_slug": dept_slug,

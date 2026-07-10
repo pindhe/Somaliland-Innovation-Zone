@@ -393,6 +393,16 @@ html.dark .badge-waitlisted { background: #581c87; color: #e9d5ff; }
   background: rgba(255, 255, 255, 0.16);
 }
 
+.learners-proof {
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
 .btn-3d {
   transform: translateZ(30px);
   box-shadow:

@@ -180,29 +180,34 @@
 {% block extra_js %}
 <script>
 (function () {
-  document.querySelectorAll("[data-count]").forEach(function (el) {
+  const el = document.getElementById("learners-count");
+  if (el) {
     const target = parseInt(el.getAttribute("data-count"), 10) || 0;
-    const duration = 1200;
+    // Longer count for bigger numbers so 0 → 1 → 2 … feels live
+    const duration = Math.min(2800, 600 + target * 8);
     const start = performance.now();
     function tick(now) {
       const p = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased).toLocaleString();
+      const value = Math.round(target * eased);
+      el.textContent = value.toLocaleString();
       if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target.toLocaleString();
     }
+    el.textContent = "0";
     requestAnimationFrame(tick);
-  });
+  }
 
   function updateDeadlines() {
-    document.querySelectorAll(".deadline[data-deadline]").forEach(function (el) {
-      const diff = new Date(el.dataset.deadline) - new Date();
+    document.querySelectorAll(".deadline[data-deadline]").forEach(function (node) {
+      const diff = new Date(node.dataset.deadline) - new Date();
       if (diff <= 0) {
-        el.textContent = "Closed";
+        node.textContent = "Closed";
         return;
       }
       const d = Math.floor(diff / 86400000);
       const h = Math.floor((diff % 86400000) / 3600000);
-      el.textContent = d > 0 ? d + "d left" : h + "h left";
+      node.textContent = d > 0 ? d + "d left" : h + "h left";
     });
   }
   updateDeadlines();
