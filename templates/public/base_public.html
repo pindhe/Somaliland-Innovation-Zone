@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block body %}
 <header class="no-print sticky top-0 z-40 glass border-b border-[var(--border)]">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
@@ -6,31 +7,35 @@
       {% if site_settings and site_settings.logo %}
         <img src="{{ site_settings.logo.url }}" alt="" class="h-9 w-9 rounded-lg object-cover">
       {% else %}
-        <span class="h-9 w-9 rounded-lg bg-brand text-white font-display font-bold flex items-center justify-center text-sm">SIZ</span>
+        <img src="{% static 'img/logo.png' %}" alt="SIZ" class="h-9 w-9 rounded-lg object-contain bg-white p-0.5">
       {% endif %}
       <span class="font-display font-semibold text-lg tracking-tight group-hover:text-brand transition">
         {{ site_settings.organization_name|default:"Somaliland Innovation Zone" }}
       </span>
     </a>
     <nav class="hidden sm:flex items-center gap-1 text-sm font-medium">
-      <a href="{% url 'public:course_list' %}" class="px-3 py-2 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--muted)] hover:text-[var(--ink)]">Courses</a>
+      <a href="{% url 'public:home' %}#courses" class="px-3 py-2 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--muted)] hover:text-[var(--ink)]">Courses</a>
       <a href="{% url 'public:application_status' %}" class="px-3 py-2 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--muted)] hover:text-[var(--ink)]">Check Status</a>
       <a href="{% url 'portal:login' %}" class="px-3 py-2 rounded-lg hover:bg-[var(--bg-accent)] text-[var(--muted)] hover:text-[var(--ink)]">Admin</a>
       <button type="button" onclick="toggleTheme()" class="btn btn-ghost px-2" aria-label="Toggle theme">◐</button>
     </nav>
     <div class="sm:hidden flex gap-2">
       <button type="button" onclick="toggleTheme()" class="btn btn-ghost px-2">◐</button>
-      <a href="{% url 'public:course_list' %}" class="btn btn-secondary text-sm py-1.5">Courses</a>
+      <a href="{% url 'public:home' %}#courses" class="btn btn-secondary text-sm py-1.5">Courses</a>
     </div>
   </div>
 </header>
 <main>{% block content %}{% endblock %}</main>
-<footer class="no-print border-t border-[var(--border)] mt-16 py-10 text-sm text-[var(--muted)]">
+<footer class="no-print border-t border-[var(--border)] mt-0 py-10 text-sm text-[var(--muted)]">
   <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between gap-4">
-    <p>{{ site_settings.footer_text|default:"© Somaliland Innovation Zone. All rights reserved." }}</p>
-    <div class="flex gap-4">
+    <div class="flex items-center gap-3">
+      <img src="{% static 'img/logo.png' %}" alt="" class="h-8 w-8 rounded-lg object-contain">
+      <p>{{ site_settings.footer_text|default:"© Somaliland Innovation Zone. All rights reserved." }}</p>
+    </div>
+    <div class="flex flex-wrap gap-4">
       {% if site_settings.website %}<a href="{{ site_settings.website }}" class="hover:text-brand">Website</a>{% endif %}
       {% if site_settings.email %}<a href="mailto:{{ site_settings.email }}" class="hover:text-brand">{{ site_settings.email }}</a>{% endif %}
+      {% if site_settings.phone %}<span>{{ site_settings.phone }}</span>{% endif %}
     </div>
   </div>
 </footer>

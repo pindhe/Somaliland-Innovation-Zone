@@ -5,8 +5,10 @@ from io import BytesIO
 import qrcode
 from django.conf import settings
 from django.contrib import messages
+from django.db.models import Count, Q, Sum
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 from django_ratelimit.decorators import ratelimit
 
@@ -14,17 +16,81 @@ from applications.emails import send_application_email
 from applications.forms import ApplicationForm, ApplicationStatusForm
 from applications.models import Application, ApplicationStatusHistory
 from applications.pdf import generate_application_pdf
+from core.models import Announcement
 from core.utils import notify_admins
-from courses.models import Course
+from courses.models import Course, Department
 
 
 def home(request):
-    courses = (
+    now = timezone.now()
+    published = (
         Course.objects.filter(status=Course.Status.PUBLISHED)
-        .select_related("department")
-        .order_by("-created_at")[:12]
+        .select_related("department", "category")
+        .annotate(app_count=Count("applications", filter=Q(applications__is_draft=False)))
+        .order_by("-created_at")
     )
-    return render(request, "public/home.html", {"courses": courses})
+
+    dept_slug = request.GET.get("department", "").strip()
+    mode = request.GET.get("mode", "").strip()
+    q = request.GET.get("q", "").strip()
+
+    courses = published
+    if dept_slug:
+        courses = courses.filter(department__slug=dept_slug)
+    if mode in dict(Course.TrainingMode.choices):
+        courses = courses.filter(training_mode=mode)
+    if q:
+        courses = courses.filter(
+            Q(title__icontains=q)
+            | Q(subtitle__icontains=q)
+            | Q(instructor__icontains=q)
+            | Q(course_code__icontains=q)
+        )
+
+    open_courses = [c for c in courses[:24] if c.is_open]
+    # Fall back to all filtered published if none currently "open"
+    featured = open_courses or list(courses[:12])
+
+    closing_soon = (
+        published.filter(registration_deadline__gte=now)
+        .order_by("registration_deadline")[:4]
+    )
+
+    departments = (
+        Department.objects.filter(is_active=True, courses__status=Course.Status.PUBLISHED)
+        .annotate(course_count=Count("courses", filter=Q(courses__status=Course.Status.PUBLISHED)))
+        .distinct()
+        .order_by("name")
+    )
+
+    stats = {
+        "courses": published.count(),
+        "departments": departments.count(),
+        "applications": Application.objects.filter(is_draft=False).count(),
+        "accepted": Application.objects.filter(
+            is_draft=False, status=Application.Status.ACCEPTED
+        ).count(),
+        "seats": published.aggregate(total=Sum("max_seats"))["total"] or 0,
+    }
+
+    announcements = Announcement.objects.filter(is_active=True)[:3]
+
+    return render(
+        request,
+        "public/home.html",
+        {
+            "courses": featured,
+            "closing_soon": closing_soon,
+            "departments": departments,
+            "stats": stats,
+            "announcements": announcements,
+            "q": q,
+            "dept_slug": dept_slug,
+            "mode": mode,
+            "modes": Course.TrainingMode.choices,
+            "total_filtered": courses.count(),
+        },
+    )
 
 
 def course_list(request):
