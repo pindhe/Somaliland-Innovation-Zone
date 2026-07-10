@@ -10,7 +10,7 @@ Built with **PHP 8+ (OOP + PDO)**, **MySQL/MariaDB**, **Tailwind CSS**,
 ---
 
 <p align="center">
-  <img src="Screenshot 2026-05-07 205752.png" width="900"/>
+  <img src="[Screenshot 2026-05-07 205752.png](https://github.com/pindhe/Somaliland-Innovation-Zone/blob/21114b25173e8aac65a56ff2e594db2ce195df6e/Screenshot%202026-07-10%20173458.png)" width="900"/>
 </p>
 
 ## ✨ Features
