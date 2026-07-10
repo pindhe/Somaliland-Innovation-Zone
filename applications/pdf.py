@@ -1,4 +1,7 @@
 from io import BytesIO
+from pathlib import Path
+
+from django.conf import settings
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
@@ -8,14 +11,31 @@ def generate_application_pdf(application):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
-    y = height - 30 * mm
+    y = height - 20 * mm
 
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(25 * mm, y, "Somaliland Innovation Zone")
-    y -= 8 * mm
-    c.setFont("Helvetica", 11)
-    c.drawString(25 * mm, y, "Application Receipt")
-    y -= 12 * mm
+    logo_path = Path(settings.BASE_DIR) / "static" / "img" / "logo.png"
+    if logo_path.exists():
+        c.drawImage(
+            str(logo_path),
+            25 * mm,
+            y - 14 * mm,
+            width=16 * mm,
+            height=16 * mm,
+            preserveAspectRatio=True,
+            mask="auto",
+        )
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(45 * mm, y - 4 * mm, "Somaliland Innovation Zone")
+        c.setFont("Helvetica", 11)
+        c.drawString(45 * mm, y - 10 * mm, "Application Receipt")
+        y -= 24 * mm
+    else:
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(25 * mm, y, "Somaliland Innovation Zone")
+        y -= 8 * mm
+        c.setFont("Helvetica", 11)
+        c.drawString(25 * mm, y, "Application Receipt")
+        y -= 12 * mm
 
     c.setFont("Helvetica-Bold", 12)
     c.drawString(25 * mm, y, f"Application No: {application.application_number}")

@@ -1,8 +1,9 @@
 {% extends "public/base_public.html" %}
+{% load static %}
 {% block title %}Application submitted – SIZ{% endblock %}
 {% block content %}
 <div class="max-w-lg mx-auto px-4 py-20 text-center">
-  <div class="mx-auto h-16 w-16 rounded-full bg-teal-100 dark:bg-teal-900/40 text-brand flex items-center justify-center text-2xl font-bold mb-6 animate-fade-up">✓</div>
+  <img src="{% static 'img/logo.png' %}" alt="SIZ logo" class="mx-auto h-16 w-16 rounded-2xl object-contain mb-6 animate-fade-up shadow-lg">
   <h1 class="font-display text-3xl font-bold animate-fade-up animate-delay-1">Application submitted successfully</h1>
   <p class="text-[var(--muted)] mt-3 animate-fade-up animate-delay-2">
     Thank you, {{ application.first_name }}. A confirmation email has been sent to {{ application.email }}.

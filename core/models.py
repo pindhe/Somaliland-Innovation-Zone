@@ -27,6 +27,10 @@ class SiteSettings(models.Model):
     smtp_user = models.CharField(max_length=200, blank=True)
     smtp_password = models.CharField(max_length=200, blank=True)
     smtp_use_tls = models.BooleanField(default=True)
+    visit_count = models.PositiveIntegerField(
+        default=0,
+        help_text="Public home visits (unique sessions) used for the learners counter.",
+    )
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

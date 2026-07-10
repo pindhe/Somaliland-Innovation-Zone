@@ -3,54 +3,54 @@
 {% block title %}{{ site_settings.organization_name|default:"Somaliland Innovation Zone" }} – Courses{% endblock %}
 {% block content %}
 {# ── Hero ─────────────────────────────────────────────── #}
-<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden perspective-hero">
+<section class="relative min-h-[100svh] flex flex-col overflow-hidden perspective-hero">
   <img
     src="{% static 'img/bghero.jpg' %}"
     alt=""
     class="absolute inset-0 w-full h-full object-cover object-center hero-bg-3d"
   >
-  <div class="absolute inset-0 bg-slate-950/55"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/35 to-slate-950/40"></div>
+  <div class="absolute inset-0 bg-slate-950/60"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-900/40 to-slate-950/85"></div>
+  <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950/90 to-transparent"></div>
 
-  <div class="relative z-10 w-full max-w-4xl mx-auto px-4 py-28 text-center hero-stage">
-    <p class="font-display text-teal-300 font-semibold tracking-[0.22em] text-sm uppercase mb-5 hero-float hero-delay-1">
-      {{ site_settings.organization_name|default:"Somaliland Innovation Zone" }}
-    </p>
-    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1] hero-title-3d hero-float hero-delay-2">
-      Welcome — apply now for the course you want
-    </h1>
-    <p class="mt-6 text-lg sm:text-xl text-white/85 max-w-2xl mx-auto hero-float hero-delay-3">
-      {% if stats.courses %}
-        {{ stats.courses }} open program{{ stats.courses|pluralize }} · apply online in minutes and track your status anytime.
-      {% else %}
-        Browse open courses and apply online in minutes. Track your application anytime.
-      {% endif %}
-    </p>
-    <div class="mt-10 flex flex-wrap justify-center gap-3 hero-float hero-delay-4">
-      <a href="#courses" class="btn btn-primary btn-3d shadow-lg shadow-teal-900/40">Explore courses</a>
-      <a href="{% url 'public:application_status' %}" class="btn btn-3d bg-white/95 text-slate-900 hover:bg-white border border-white/50 shadow-lg">Check application status</a>
+  <div class="relative z-10 flex-1 flex flex-col justify-center items-center px-4 pt-28 pb-8 text-center">
+    <div class="hero-stage max-w-4xl w-full">
+      <img
+        src="{% static 'img/siz.jpg' %}"
+        alt="Somaliland Innovation Zone logo"
+        class="mx-auto h-24 w-24 sm:h-28 sm:w-28 rounded-full object-contain mb-6 hero-float hero-delay-0 hero-logo-3d"
+      >
+      <p class="font-display text-teal-300 font-semibold tracking-[0.22em] text-sm uppercase mb-4 hero-float hero-delay-1">
+        {{ site_settings.organization_name|default:"Somaliland Innovation Zone" }}
+      </p>
+      <h1 class="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-white leading-[1.12] hero-title-3d hero-float hero-delay-2">
+        Welcome — apply now for the course you want
+      </h1>
+      <p class="mt-5 text-base sm:text-lg text-white/85 max-w-2xl mx-auto hero-float hero-delay-3">
+        {% if stats.courses %}
+          {{ stats.courses }} open program{{ stats.courses|pluralize }} · apply online in minutes and track your status anytime.
+        {% else %}
+          Browse open courses and apply online in minutes. Track your application anytime.
+        {% endif %}
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3 hero-float hero-delay-4">
+        <a href="#courses" class="btn btn-primary btn-3d px-7">Explore courses</a>
+        <a href="{% url 'public:application_status' %}" class="btn btn-3d bg-white text-slate-900 hover:bg-teal-50 border-0 px-7">Check application status</a>
+      </div>
     </div>
   </div>
-</section>
 
-{# ── Live stats ───────────────────────────────────────── #}
-<section class="relative z-20 -mt-10 max-w-6xl mx-auto px-4">
-  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-    <div class="glass rounded-2xl p-4 sm:p-5 text-center animate-fade-up">
-      <div class="font-display text-2xl sm:text-3xl font-bold text-brand" data-count="{{ stats.courses }}">0</div>
-      <div class="text-xs sm:text-sm text-[var(--muted)] mt-1">Published courses</div>
-    </div>
-    <div class="glass rounded-2xl p-4 sm:p-5 text-center animate-fade-up animate-delay-1">
-      <div class="font-display text-2xl sm:text-3xl font-bold text-brand" data-count="{{ stats.seats }}">0</div>
-      <div class="text-xs sm:text-sm text-[var(--muted)] mt-1">Total seats</div>
-    </div>
-    <div class="glass rounded-2xl p-4 sm:p-5 text-center animate-fade-up animate-delay-2">
-      <div class="font-display text-2xl sm:text-3xl font-bold text-brand" data-count="{{ stats.applications }}">0</div>
-      <div class="text-xs sm:text-sm text-[var(--muted)] mt-1">Applications</div>
-    </div>
-    <div class="glass rounded-2xl p-4 sm:p-5 text-center animate-fade-up animate-delay-3">
-      <div class="font-display text-2xl sm:text-3xl font-bold text-brand" data-count="{{ stats.accepted }}">0</div>
-      <div class="text-xs sm:text-sm text-[var(--muted)] mt-1">Accepted students</div>
+  <div class="relative z-10 w-full flex justify-center px-4 pb-12 sm:pb-14">
+    <div class="learners-proof hero-float hero-delay-5 inline-flex items-center gap-3 sm:gap-4">
+      <div class="flex -space-x-2.5 shrink-0" aria-hidden="true">
+        <span class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-teal-800 ring-2 ring-slate-950"></span>
+        <span class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-teal-500 ring-2 ring-slate-950"></span>
+        <span class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-amber-400 ring-2 ring-slate-950"></span>
+        <span class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-lime-400 ring-2 ring-slate-950"></span>
+      </div>
+      <p class="text-white text-sm sm:text-base text-left leading-snug">
+        Join <strong class="font-bold tabular-nums"><span id="learners-count" data-count="{{ learners_count }}">0</span>+</strong> learners building their future
+      </p>
     </div>
   </div>
 </section>
@@ -129,7 +129,7 @@
           <img src="{% static 'img/tab.jpg' %}" alt="" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition duration-500">
           <div class="absolute inset-0 flex items-center justify-center font-display text-2xl font-bold text-white drop-shadow-lg">{{ course.course_code }}</div>
           {% endif %}
-          <span class="absolute top-3 left-3 badge badge-{{ course.training_mode|default:'published' }} bg-white/90 text-slate-800">{{ course.get_training_mode_display }}</span>
+          <span class="absolute top-3 left-3 badge bg-white/90 text-slate-800">{{ course.get_training_mode_display }}</span>
           {% if course.pricing_type == 'free' %}
           <span class="absolute top-3 right-3 badge badge-accepted">Free</span>
           {% endif %}
@@ -180,7 +180,6 @@
 {% block extra_js %}
 <script>
 (function () {
-  // Animated counters
   document.querySelectorAll("[data-count]").forEach(function (el) {
     const target = parseInt(el.getAttribute("data-count"), 10) || 0;
     const duration = 1200;
@@ -194,7 +193,6 @@
     requestAnimationFrame(tick);
   });
 
-  // Deadline countdowns on cards
   function updateDeadlines() {
     document.querySelectorAll(".deadline[data-deadline]").forEach(function (el) {
       const diff = new Date(el.dataset.deadline) - new Date();
@@ -210,7 +208,6 @@
   updateDeadlines();
   setInterval(updateDeadlines, 60000);
 
-  // Live seat refresh
   async function refreshSeats() {
     const nodes = document.querySelectorAll(".seat-count[data-slug]");
     const slugs = [...new Set([...nodes].map((n) => n.dataset.slug))];
