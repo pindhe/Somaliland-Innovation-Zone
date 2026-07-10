@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="min-h-screen flex">
+  <aside class="no-print hidden lg:flex w-64 flex-col border-r border-[var(--border)] bg-[var(--surface)] p-4 sticky top-0 h-screen">
+    <a href="{% url 'portal:dashboard' %}" class="flex items-center gap-2.5 px-2 mb-8">
+      <span class="h-9 w-9 rounded-lg bg-brand text-white font-display font-bold flex items-center justify-center text-sm">SIZ</span>
+      <div>
+        <div class="font-display font-semibold text-sm leading-tight">Admin Portal</div>
+        <div class="text-xs text-[var(--muted)]">Course Registration</div>
+      </div>
+    </a>
+    <nav class="flex-1 space-y-1 text-sm">
+      <a href="{% url 'portal:dashboard' %}" class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'portal:course_list' %}" class="sidebar-link {% if 'course' in request.resolver_match.url_name %}active{% endif %}">Courses</a>
+      <a href="{% url 'portal:application_list' %}" class="sidebar-link {% if 'application' in request.resolver_match.url_name %}active{% endif %}">Applications</a>
+      <a href="{% url 'portal:students' %}" class="sidebar-link {% if request.resolver_match.url_name == 'students' %}active{% endif %}">Students</a>
+      <a href="{% url 'portal:reports' %}" class="sidebar-link {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">Reports</a>
+      <a href="{% url 'portal:departments' %}" class="sidebar-link {% if request.resolver_match.url_name == 'departments' %}active{% endif %}">Departments</a>
+      <a href="{% url 'portal:activity' %}" class="sidebar-link {% if request.resolver_match.url_name == 'activity' %}active{% endif %}">Activity Log</a>
+      <a href="{% url 'portal:settings' %}" class="sidebar-link {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">Settings</a>
+    </nav>
+    <div class="border-t border-[var(--border)] pt-4 space-y-2">
+      <div class="px-2 text-xs text-[var(--muted)] truncate">{{ request.user.get_full_name|default:request.user.username }}</div>
+      <div class="flex gap-1">
+        <button type="button" onclick="toggleTheme()" class="btn btn-ghost text-sm flex-1">Theme</button>
+        <a href="{% url 'portal:logout' %}" class="btn btn-ghost text-sm flex-1">Logout</a>
+      </div>
+      <a href="{% url 'public:home' %}" class="sidebar-link text-xs">← Public site</a>
+    </div>
+  </aside>
+  <div class="flex-1 min-w-0">
+    <header class="no-print lg:hidden sticky top-0 z-30 glass border-b border-[var(--border)] px-4 py-3 flex items-center justify-between">
+      <span class="font-display font-semibold">SIZ Admin</span>
+      <div class="flex gap-2 text-sm">
+        <a href="{% url 'portal:dashboard' %}">Home</a>
+        <a href="{% url 'portal:course_list' %}">Courses</a>
+        <a href="{% url 'portal:application_list' %}">Apps</a>
+        <a href="{% url 'portal:logout' %}">Out</a>
+      </div>
+    </header>
+    <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+      {% block breadcrumb %}{% endblock %}
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

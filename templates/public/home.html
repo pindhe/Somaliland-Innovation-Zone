@@ -1,0 +1,68 @@
+{% extends "public/base_public.html" %}
+{% load static %}
+{% block title %}Somaliland Innovation Zone – Courses{% endblock %}
+{% block content %}
+<section class="relative min-h-[78vh] flex items-end overflow-hidden">
+  <img
+    src="{% static 'img/bghero.jpg' %}"
+    alt=""
+    class="absolute inset-0 w-full h-full object-cover object-center scale-105 animate-[heroZoom_18s_ease-in-out_infinite_alternate]"
+  >
+  <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-slate-900/25"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-900/20"></div>
+
+  <div class="relative z-10 w-full max-w-6xl mx-auto px-4 pt-28 pb-16 sm:pt-36 sm:pb-24">
+    <p class="font-display text-teal-300 font-semibold tracking-[0.18em] text-sm uppercase mb-4 animate-fade-up">
+      Somaliland Innovation Zone
+    </p>
+    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white max-w-3xl leading-[1.08] animate-fade-up animate-delay-1">
+      Welcome — apply now for the course you want
+    </h1>
+    <p class="mt-5 text-lg text-white/80 max-w-xl animate-fade-up animate-delay-2">
+      Browse open courses and apply online in minutes. Track your application anytime.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3 animate-fade-up animate-delay-3">
+      <a href="{% url 'public:course_list' %}" class="btn btn-primary shadow-lg shadow-teal-900/30">Explore courses</a>
+      <a href="{% url 'public:application_status' %}" class="btn bg-white/95 text-slate-900 hover:bg-white border border-white/40 shadow-md">Check application status</a>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-6xl mx-auto px-4 py-16 sm:py-20">
+  <div class="flex items-end justify-between mb-8">
+    <div>
+      <h2 class="font-display text-2xl font-semibold">Open courses</h2>
+      <p class="text-[var(--muted)] text-sm mt-1">Currently accepting applications</p>
+    </div>
+    <a href="{% url 'public:course_list' %}" class="text-sm font-medium text-brand hover:underline">View all</a>
+  </div>
+  {% if courses %}
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for course in courses %}
+    <a href="{% url 'public:course_detail' course.slug %}" class="card-soft overflow-hidden group hover:-translate-y-1 transition duration-200 block">
+      <div class="aspect-[16/9] bg-[var(--bg-accent)] overflow-hidden">
+        {% if course.thumbnail %}
+        <img src="{{ course.thumbnail.url }}" alt="" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+        {% else %}
+        <div class="w-full h-full flex items-center justify-center text-brand/40 font-display text-3xl font-bold">{{ course.course_code }}</div>
+        {% endif %}
+      </div>
+      <div class="p-5">
+        <div class="text-xs text-[var(--muted)] mb-1">{{ course.department.name|default:"General" }} · {{ course.get_training_mode_display }}</div>
+        <h3 class="font-display font-semibold text-lg leading-snug group-hover:text-brand transition">{{ course.title }}</h3>
+        <p class="text-sm text-[var(--muted)] mt-2 line-clamp-2">{{ course.subtitle|default:course.description|truncatewords:18 }}</p>
+        <div class="mt-4 flex items-center justify-between text-xs text-[var(--muted)]">
+          <span>{{ course.seats_remaining }} seats left</span>
+          <span class="text-brand font-semibold">Apply →</span>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="card-soft p-12 text-center text-[var(--muted)]">
+    No published courses yet. Check back soon.
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

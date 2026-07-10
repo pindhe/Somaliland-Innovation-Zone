@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Application Received</title></head>
+<body style="font-family: system-ui, sans-serif; color: #0f172a; line-height: 1.5;">
+  <div style="max-width: 560px; margin: 0 auto; padding: 24px;">
+    <h1 style="color: #0d9488;">Application received</h1>
+    <p>Hello {{ application.first_name }},</p>
+    <p>We received your application for <strong>{{ course.title }}</strong>.</p>
+    <p>Your application number is <strong>{{ application.application_number }}</strong>.</p>
+    <p>You can check your status anytime at <a href="{{ site_url }}/application-status/">{{ site_url }}/application-status/</a>.</p>
+    <p style="color: #64748b; font-size: 14px;">Somaliland Innovation Zone</p>
+  </div>
+</body>
+</html>

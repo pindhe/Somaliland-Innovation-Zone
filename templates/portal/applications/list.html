@@ -1,0 +1,65 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Applications – SIZ Admin{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-end justify-between gap-4 mb-6">
+  <div>
+    <h1 class="font-display text-2xl font-bold">Applications</h1>
+    <p class="text-sm text-[var(--muted)]">Review and manage student applications</p>
+  </div>
+  <div class="flex gap-2">
+    <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}export=csv" class="btn btn-secondary text-sm">Export CSV</a>
+    <a href="?{% if request.GET.urlencode %}{{ request.GET.urlencode }}&{% endif %}export=excel" class="btn btn-secondary text-sm">Export Excel</a>
+  </div>
+</div>
+
+<form method="get" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
+  <input type="search" name="q" value="{{ q }}" placeholder="Name, email, phone, number…" class="form-input sm:col-span-2">
+  <select name="status" class="form-input">
+    <option value="">All statuses</option>
+    {% for val, label in statuses %}
+    <option value="{{ val }}" {% if status == val %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <select name="course" class="form-input">
+    <option value="">All courses</option>
+    {% for c in courses %}
+    <option value="{{ c.pk }}" {% if course_id == c.pk|stringformat:'s' %}selected{% endif %}>{{ c.title|truncatechars:40 }}</option>
+    {% endfor %}
+  </select>
+  <select name="department" class="form-input">
+    <option value="">All departments</option>
+    {% for d in departments %}
+    <option value="{{ d.pk }}" {% if dept == d.pk|stringformat:'s' %}selected{% endif %}>{{ d.name }}</option>
+    {% endfor %}
+  </select>
+  <input type="date" name="from" value="{{ date_from }}" class="form-input" title="From">
+  <input type="date" name="to" value="{{ date_to }}" class="form-input" title="To">
+  <button class="btn btn-primary" type="submit">Search</button>
+</form>
+
+<div class="table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Number</th><th>Student</th><th>Email</th><th>Phone</th><th>Course</th><th>Date</th><th>Status</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in applications %}
+      <tr>
+        <td class="font-medium whitespace-nowrap">{{ a.application_number }}</td>
+        <td>{{ a.full_name }}</td>
+        <td>{{ a.email }}</td>
+        <td>{{ a.phone }}</td>
+        <td>{{ a.course.title|truncatechars:24 }}</td>
+        <td class="whitespace-nowrap">{{ a.created_at|date:"Y-m-d" }}</td>
+        <td><span class="badge badge-{{ a.status }}">{{ a.get_status_display }}</span></td>
+        <td><a href="{% url 'portal:application_detail' a.pk %}" class="text-brand text-sm">View</a></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="8" class="text-[var(--muted)]">No applications found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

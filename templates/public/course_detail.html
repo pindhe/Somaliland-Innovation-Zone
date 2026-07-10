@@ -1,0 +1,127 @@
+{% extends "public/base_public.html" %}
+{% block title %}{{ course.title }} – SIZ{% endblock %}
+{% block content %}
+{% if course.banner %}
+<section class="hero-public" style="background: url('{{ course.banner.url }}') center/cover;">
+{% else %}
+<section class="hero-public bg-gradient-to-br from-slate-800 via-teal-900 to-slate-900">
+{% endif %}
+  <div class="hero-content max-w-4xl mx-auto px-4 pb-12 pt-32 text-white w-full">
+    <p class="text-teal-200 text-sm font-medium mb-2">{{ course.course_code }} · {{ course.get_training_mode_display }}</p>
+    <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-tight">{{ course.title }}</h1>
+    {% if course.subtitle %}<p class="mt-3 text-lg text-white/80 max-w-2xl">{{ course.subtitle }}</p>{% endif %}
+    <p class="mt-4 text-white/70">Instructor: {{ course.instructor }}</p>
+  </div>
+</section>
+
+<div class="max-w-4xl mx-auto px-4 -mt-6 relative z-10 pb-16">
+  <div class="glass rounded-2xl p-5 sm:p-6 flex flex-wrap gap-4 sm:gap-8 items-center justify-between mb-10">
+    <div>
+      <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Seats remaining</div>
+      <div class="font-display text-2xl font-bold text-brand" id="seats-count">{{ course.seats_remaining }}</div>
+    </div>
+    <div>
+      <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Deadline</div>
+      <div class="font-semibold" id="countdown">
+        {% if course.registration_deadline %}{{ course.registration_deadline|date:"M d, Y H:i" }}{% else %}Open{% endif %}
+      </div>
+    </div>
+    <div>
+      <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Duration</div>
+      <div class="font-semibold">{{ course.duration|default:"—" }}</div>
+    </div>
+    {% if course.is_open %}
+    <a href="{% url 'public:apply' course.slug %}" class="btn btn-primary">Apply now</a>
+    {% else %}
+    <span class="badge badge-closed">Registration closed</span>
+    {% endif %}
+  </div>
+
+  <article class="space-y-10">
+    <section>
+      <h2 class="font-display text-xl font-semibold mb-3">About this course</h2>
+      <div class="prose prose-slate dark:prose-invert max-w-none text-[var(--muted)] leading-relaxed whitespace-pre-line">{{ course.description }}</div>
+    </section>
+
+    {% if course.requirements %}
+    <section>
+      <h2 class="font-display text-xl font-semibold mb-3">Requirements</h2>
+      <div class="text-[var(--muted)] whitespace-pre-line">{{ course.requirements }}</div>
+    </section>
+    {% endif %}
+
+    {% if course.benefits %}
+    <section>
+      <h2 class="font-display text-xl font-semibold mb-3">Benefits</h2>
+      <div class="text-[var(--muted)] whitespace-pre-line">{{ course.benefits }}</div>
+    </section>
+    {% endif %}
+
+    {% if course.modules.exists %}
+    <section>
+      <h2 class="font-display text-xl font-semibold mb-4">Modules</h2>
+      <ol class="space-y-3">
+        {% for m in course.modules.all %}
+        <li class="card-soft p-4">
+          <div class="font-semibold">{{ forloop.counter }}. {{ m.title }}</div>
+          {% if m.description %}<p class="text-sm text-[var(--muted)] mt-1">{{ m.description }}</p>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+    {% endif %}
+
+    <section class="grid sm:grid-cols-2 gap-4 text-sm">
+      <div class="card-soft p-4"><span class="text-[var(--muted)]">Location</span><div class="font-medium mt-1">{{ course.location|default:"—" }}</div></div>
+      <div class="card-soft p-4"><span class="text-[var(--muted)]">Language</span><div class="font-medium mt-1">{{ course.language }}</div></div>
+      <div class="card-soft p-4"><span class="text-[var(--muted)]">Certificate</span><div class="font-medium mt-1">{% if course.certificate_available %}Yes{% else %}No{% endif %}</div></div>
+      <div class="card-soft p-4"><span class="text-[var(--muted)]">Pricing</span><div class="font-medium mt-1">{% if course.pricing_type == 'free' %}Free{% else %}{{ course.price }}{% endif %}</div></div>
+    </section>
+
+    <section class="card-soft p-6">
+      <h2 class="font-display font-semibold mb-3">Share this course</h2>
+      <div class="flex flex-wrap gap-2">
+        <button type="button" class="btn btn-secondary text-sm" onclick="copyText('{{ share_url }}', this)">Copy link</button>
+        <a class="btn btn-secondary text-sm" target="_blank" rel="noopener"
+           href="https://wa.me/?text={{ course.title|urlencode }}%20{{ apply_abs|urlencode }}">WhatsApp</a>
+        <a class="btn btn-secondary text-sm" target="_blank" rel="noopener"
+           href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}">Facebook</a>
+        <a class="btn btn-secondary text-sm" target="_blank" rel="noopener"
+           href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url|urlencode }}">LinkedIn</a>
+        <a class="btn btn-secondary text-sm" target="_blank" rel="noopener"
+           href="https://twitter.com/intent/tweet?url={{ share_url|urlencode }}&text={{ course.title|urlencode }}">X</a>
+      </div>
+      <div class="mt-4 flex items-center gap-4">
+        <img src="{% url 'public:course_qr' course.slug %}" alt="QR code" class="w-28 h-28 rounded-lg border border-[var(--border)] bg-white p-1">
+        <p class="text-sm text-[var(--muted)]">Scan to open the application form.</p>
+      </div>
+    </section>
+  </article>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+(function(){
+  const deadline = {% if course.registration_deadline %}"{{ course.registration_deadline|date:'c' }}"{% else %}null{% endif %};
+  const el = document.getElementById('countdown');
+  if (deadline && el) {
+    function tick(){
+      const diff = new Date(deadline) - new Date();
+      if (diff <= 0) { el.textContent = 'Closed'; return; }
+      const d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000);
+      el.textContent = d + 'd ' + h + 'h ' + m + 'm left';
+    }
+    tick(); setInterval(tick, 60000);
+  }
+  async function refreshSeats(){
+    try {
+      const r = await fetch("{% url 'public:seats_api' course.slug %}");
+      const data = await r.json();
+      const s = document.getElementById('seats-count');
+      if (s) s.textContent = data.seats_remaining;
+    } catch(e){}
+  }
+  setInterval(refreshSeats, 30000);
+})();
+</script>
+{% endblock %}

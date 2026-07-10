@@ -1,0 +1,25 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Students – SIZ Admin{% endblock %}
+{% block content %}
+<h1 class="font-display text-2xl font-bold mb-2">Accepted students</h1>
+<p class="text-sm text-[var(--muted)] mb-6">Students with accepted applications</p>
+<form method="get" class="mb-4 max-w-sm"><input type="search" name="q" value="{{ q }}" class="form-input" placeholder="Search…"></form>
+<div class="table-wrap">
+  <table class="data-table">
+    <thead><tr><th>Number</th><th>Name</th><th>Email</th><th>Course</th><th>Accepted</th></tr></thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td><a href="{% url 'portal:application_detail' s.pk %}" class="text-brand">{{ s.application_number }}</a></td>
+        <td>{{ s.full_name }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.course.title }}</td>
+        <td>{{ s.reviewed_at|date:"Y-m-d"|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="text-[var(--muted)]">No accepted students yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

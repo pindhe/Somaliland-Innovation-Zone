@@ -1,0 +1,55 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}{{ course.title }} – SIZ Admin{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-start justify-between gap-4 mb-6">
+  <div>
+    <a href="{% url 'portal:course_list' %}" class="text-sm text-brand">← Courses</a>
+    <h1 class="font-display text-2xl font-bold mt-2">{{ course.title }}</h1>
+    <p class="text-sm text-[var(--muted)]">{{ course.course_code }} · <span class="badge badge-{{ course.status }}">{{ course.get_status_display }}</span></p>
+  </div>
+  <div class="flex flex-wrap gap-2">
+    <a href="{% url 'portal:course_edit' course.pk %}" class="btn btn-primary text-sm">Edit</a>
+    <a href="{% url 'public:course_detail' course.slug %}" target="_blank" class="btn btn-secondary text-sm">Preview</a>
+  </div>
+</div>
+
+<div class="card-soft p-5 mb-6">
+  <h2 class="font-display font-semibold mb-3">Public links</h2>
+  <div class="space-y-2 text-sm">
+    <div class="flex flex-wrap items-center gap-2">
+      <code class="bg-[var(--bg)] px-2 py-1 rounded text-xs break-all">{{ site_url }}</code>
+      <button type="button" class="btn btn-secondary text-xs py-1" onclick="copyText('{{ site_url }}', this)">Copy</button>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      <code class="bg-[var(--bg)] px-2 py-1 rounded text-xs break-all">{{ apply_url }}</code>
+      <button type="button" class="btn btn-secondary text-xs py-1" onclick="copyText('{{ apply_url }}', this)">Copy apply link</button>
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-2 mt-4">
+    <a class="btn btn-ghost text-sm" target="_blank" href="https://wa.me/?text={{ course.title|urlencode }}%20{{ apply_url|urlencode }}">WhatsApp</a>
+    <img src="{% url 'public:course_qr' course.slug %}" alt="QR" class="w-20 h-20 rounded border border-[var(--border)] bg-white">
+  </div>
+</div>
+
+<div class="grid sm:grid-cols-3 gap-4 mb-6">
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">Seats left</div><div class="text-2xl font-bold">{{ course.seats_remaining }}/{{ course.max_seats }}</div></div>
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">Applications</div><div class="text-2xl font-bold">{{ course.applications.count }}</div></div>
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">Accepted</div><div class="text-2xl font-bold">{{ course.accepted_count }}</div></div>
+</div>
+
+<div class="flex flex-wrap gap-2 mb-8">
+  <form method="post" action="{% url 'portal:course_action' course.pk 'publish' %}">{% csrf_token %}<button class="btn btn-secondary text-sm">Publish</button></form>
+  <form method="post" action="{% url 'portal:course_action' course.pk 'unpublish' %}">{% csrf_token %}<button class="btn btn-secondary text-sm">Unpublish</button></form>
+  <form method="post" action="{% url 'portal:course_action' course.pk 'close' %}">{% csrf_token %}<button class="btn btn-secondary text-sm">Close</button></form>
+  <form method="post" action="{% url 'portal:course_action' course.pk 'reopen' %}">{% csrf_token %}<button class="btn btn-secondary text-sm">Reopen</button></form>
+  <form method="post" action="{% url 'portal:course_action' course.pk 'archive' %}">{% csrf_token %}<button class="btn btn-secondary text-sm">Archive</button></form>
+  <form method="post" action="{% url 'portal:course_action' course.pk 'duplicate' %}">{% csrf_token %}<button class="btn btn-secondary text-sm">Duplicate</button></form>
+  <form method="post" action="{% url 'portal:course_action' course.pk 'delete' %}" onsubmit="return confirm('Delete this course?');">{% csrf_token %}<button class="btn btn-danger text-sm">Delete</button></form>
+</div>
+
+<div class="card-soft p-6 prose prose-sm max-w-none dark:prose-invert">
+  <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+  <p><strong>Mode:</strong> {{ course.get_training_mode_display }} · {{ course.location }}</p>
+  <div class="whitespace-pre-line text-[var(--muted)]">{{ course.description }}</div>
+</div>
+{% endblock %}

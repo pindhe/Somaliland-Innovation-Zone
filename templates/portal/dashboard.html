@@ -1,0 +1,101 @@
+{% extends "portal/base_portal.html" %}
+{% block title %}Dashboard – SIZ Admin{% endblock %}
+{% block content %}
+<div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+  <div>
+    <h1 class="font-display text-2xl sm:text-3xl font-bold">Dashboard</h1>
+    <p class="text-[var(--muted)] text-sm mt-1">Overview of courses and applications</p>
+  </div>
+  <a href="{% url 'portal:course_create' %}" class="btn btn-primary">Add course</a>
+</div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="stat-card animate-fade-up">
+    <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Total courses</div>
+    <div class="font-display text-3xl font-bold mt-1">{{ stats.total_courses }}</div>
+  </div>
+  <div class="stat-card animate-fade-up animate-delay-1">
+    <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Published</div>
+    <div class="font-display text-3xl font-bold mt-1 text-brand">{{ stats.published_courses }}</div>
+  </div>
+  <div class="stat-card animate-fade-up animate-delay-2">
+    <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Applications</div>
+    <div class="font-display text-3xl font-bold mt-1">{{ stats.total_applications }}</div>
+  </div>
+  <div class="stat-card animate-fade-up animate-delay-3">
+    <div class="text-xs text-[var(--muted)] uppercase tracking-wide">Pending</div>
+    <div class="font-display text-3xl font-bold mt-1 text-amber-600">{{ stats.pending }}</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">Draft</div><div class="text-xl font-bold">{{ stats.draft_courses }}</div></div>
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">Accepted</div><div class="text-xl font-bold text-emerald-600">{{ stats.accepted }}</div></div>
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">Rejected</div><div class="text-xl font-bold text-red-600">{{ stats.rejected }}</div></div>
+  <div class="stat-card"><div class="text-xs text-[var(--muted)]">This week</div><div class="text-xl font-bold">{{ week_apps }}</div></div>
+</div>
+
+<div class="grid lg:grid-cols-2 gap-6 mb-8">
+  <div class="card-soft p-5">
+    <h2 class="font-display font-semibold mb-4">Applications (7 days)</h2>
+    <canvas id="chartDays" height="180"></canvas>
+  </div>
+  <div class="card-soft p-5">
+    <h2 class="font-display font-semibold mb-4">By status</h2>
+    <canvas id="chartStatus" height="180"></canvas>
+  </div>
+</div>
+
+<div class="card-soft overflow-hidden">
+  <div class="px-5 py-4 border-b border-[var(--border)] flex justify-between items-center">
+    <h2 class="font-display font-semibold">Recent applications</h2>
+    <a href="{% url 'portal:application_list' %}" class="text-sm text-brand">View all</a>
+  </div>
+  <div class="table-wrap border-0 rounded-none">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Number</th><th>Student</th><th>Course</th><th>Status</th><th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in recent %}
+        <tr>
+          <td><a href="{% url 'portal:application_detail' a.pk %}" class="text-brand font-medium">{{ a.application_number }}</a></td>
+          <td>{{ a.full_name }}</td>
+          <td>{{ a.course.title|truncatechars:28 }}</td>
+          <td><span class="badge badge-{{ a.status }}">{{ a.get_status_display }}</span></td>
+          <td>{{ a.created_at|date:"M d" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-[var(--muted)]">No applications yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+const byDay = {{ by_day|safe }};
+const byStatus = {{ by_status|safe }};
+const ink = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#0f172a';
+new Chart(document.getElementById('chartDays'), {
+  type: 'bar',
+  data: {
+    labels: byDay.map(d => d.date),
+    datasets: [{ label: 'Applications', data: byDay.map(d => d.count), backgroundColor: '#0d9488', borderRadius: 6 }]
+  },
+  options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+});
+new Chart(document.getElementById('chartStatus'), {
+  type: 'doughnut',
+  data: {
+    labels: byStatus.map(s => s.status),
+    datasets: [{ data: byStatus.map(s => s.count), backgroundColor: ['#f59e0b','#6366f1','#10b981','#ef4444','#a855f7'] }]
+  },
+  options: { plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+{% endblock %}

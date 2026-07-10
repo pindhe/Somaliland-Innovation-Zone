@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Print – {{ application.application_number }}{% endblock %}
+{% block body %}
+<div class="max-w-3xl mx-auto p-8">
+  <div class="no-print mb-4 flex gap-2">
+    <button onclick="window.print()" class="btn btn-primary">Print</button>
+    <a href="{% url 'portal:application_detail' application.pk %}" class="btn btn-secondary">Back</a>
+  </div>
+  <h1 class="font-display text-2xl font-bold">Application summary</h1>
+  <p class="text-[var(--muted)]">{{ application.application_number }} · {{ application.get_status_display }}</p>
+  <hr class="my-6 border-[var(--border)]">
+  <dl class="grid grid-cols-2 gap-3 text-sm">
+    <div><dt class="text-[var(--muted)]">Name</dt><dd class="font-medium">{{ application.full_name }}</dd></div>
+    <div><dt class="text-[var(--muted)]">Email</dt><dd>{{ application.email }}</dd></div>
+    <div><dt class="text-[var(--muted)]">Phone</dt><dd>{{ application.phone }}</dd></div>
+    <div><dt class="text-[var(--muted)]">Course</dt><dd>{{ application.course.title }}</dd></div>
+    <div><dt class="text-[var(--muted)]">Education</dt><dd>{{ application.highest_education }}</dd></div>
+    <div><dt class="text-[var(--muted)]">Submitted</dt><dd>{{ application.created_at }}</dd></div>
+  </dl>
+  <h2 class="font-semibold mt-8 mb-2">Motivation</h2>
+  <p class="text-sm whitespace-pre-line">{{ application.motivation }}</p>
+  <h2 class="font-semibold mt-6 mb-2">Career goals</h2>
+  <p class="text-sm whitespace-pre-line">{{ application.career_goals }}</p>
+</div>
+{% endblock %}
