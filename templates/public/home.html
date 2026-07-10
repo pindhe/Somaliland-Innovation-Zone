@@ -2,28 +2,28 @@
 {% load static %}
 {% block title %}Somaliland Innovation Zone – Courses{% endblock %}
 {% block content %}
-<section class="relative min-h-[78vh] flex items-end overflow-hidden">
+<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden perspective-hero">
   <img
     src="{% static 'img/bghero.jpg' %}"
     alt=""
-    class="absolute inset-0 w-full h-full object-cover object-center scale-105 animate-[heroZoom_18s_ease-in-out_infinite_alternate]"
+    class="absolute inset-0 w-full h-full object-cover object-center hero-bg-3d"
   >
-  <div class="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-slate-900/25"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-900/20"></div>
+  <div class="absolute inset-0 bg-slate-950/55"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/35 to-slate-950/40"></div>
 
-  <div class="relative z-10 w-full max-w-6xl mx-auto px-4 pt-28 pb-16 sm:pt-36 sm:pb-24">
-    <p class="font-display text-teal-300 font-semibold tracking-[0.18em] text-sm uppercase mb-4 animate-fade-up">
+  <div class="relative z-10 w-full max-w-4xl mx-auto px-4 py-28 text-center hero-stage">
+    <p class="font-display text-teal-300 font-semibold tracking-[0.22em] text-sm uppercase mb-5 hero-float hero-delay-1">
       Somaliland Innovation Zone
     </p>
-    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white max-w-3xl leading-[1.08] animate-fade-up animate-delay-1">
+    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1] hero-title-3d hero-float hero-delay-2">
       Welcome — apply now for the course you want
     </h1>
-    <p class="mt-5 text-lg text-white/80 max-w-xl animate-fade-up animate-delay-2">
+    <p class="mt-6 text-lg sm:text-xl text-white/85 max-w-2xl mx-auto hero-float hero-delay-3">
       Browse open courses and apply online in minutes. Track your application anytime.
     </p>
-    <div class="mt-8 flex flex-wrap gap-3 animate-fade-up animate-delay-3">
-      <a href="{% url 'public:course_list' %}" class="btn btn-primary shadow-lg shadow-teal-900/30">Explore courses</a>
-      <a href="{% url 'public:application_status' %}" class="btn bg-white/95 text-slate-900 hover:bg-white border border-white/40 shadow-md">Check application status</a>
+    <div class="mt-10 flex flex-wrap justify-center gap-3 hero-float hero-delay-4">
+      <a href="{% url 'public:course_list' %}" class="btn btn-primary btn-3d shadow-lg shadow-teal-900/40">Explore courses</a>
+      <a href="{% url 'public:application_status' %}" class="btn btn-3d bg-white/95 text-slate-900 hover:bg-white border border-white/50 shadow-lg">Check application status</a>
     </div>
   </div>
 </section>

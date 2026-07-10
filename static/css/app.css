@@ -300,8 +300,104 @@ html.dark .badge-waitlisted { background: #581c87; color: #e9d5ff; }
 }
 
 @keyframes heroZoom {
-  from { transform: scale(1.05); }
-  to { transform: scale(1.12); }
+  from { transform: scale(1.08) translateZ(-40px); }
+  to { transform: scale(1.18) translateZ(0); }
+}
+
+@keyframes heroFloatIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) translateZ(-80px) rotateX(18deg) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) translateZ(0) rotateX(0deg) scale(1);
+  }
+}
+
+@keyframes heroBob {
+  0%, 100% { transform: translateY(0) translateZ(20px); }
+  50% { transform: translateY(-8px) translateZ(28px); }
+}
+
+@keyframes heroTilt {
+  0%, 100% { transform: perspective(900px) rotateX(2deg) rotateY(-2deg); }
+  50% { transform: perspective(900px) rotateX(-1deg) rotateY(2deg); }
+}
+
+.perspective-hero {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.hero-bg-3d {
+  transform-origin: center center;
+  animation: heroZoom 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-stage {
+  transform-style: preserve-3d;
+  animation: heroTilt 10s ease-in-out infinite;
+}
+
+.hero-float {
+  opacity: 0;
+  transform-style: preserve-3d;
+  animation: heroFloatIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-delay-1 { animation-delay: 0.1s; }
+.hero-delay-2 { animation-delay: 0.28s; }
+.hero-delay-3 { animation-delay: 0.46s; }
+.hero-delay-4 { animation-delay: 0.64s; }
+
+.hero-title-3d {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.15),
+    0 8px 0 rgba(13, 148, 136, 0.25),
+    0 16px 28px rgba(0, 0, 0, 0.45),
+    0 28px 50px rgba(0, 0, 0, 0.35);
+  transform: translateZ(40px);
+}
+
+.hero-delay-2.hero-float {
+  animation:
+    heroFloatIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.28s forwards,
+    heroBob 4.5s ease-in-out 1.3s infinite;
+}
+
+.btn-3d {
+  transform: translateZ(30px);
+  box-shadow:
+    0 10px 0 rgba(15, 23, 42, 0.18),
+    0 18px 32px rgba(0, 0, 0, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-3d:hover {
+  transform: translateZ(40px) translateY(-3px);
+  box-shadow:
+    0 14px 0 rgba(15, 23, 42, 0.16),
+    0 24px 40px rgba(0, 0, 0, 0.32);
+}
+
+.btn-3d:active {
+  transform: translateZ(10px) translateY(2px);
+  box-shadow:
+    0 4px 0 rgba(15, 23, 42, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-3d,
+  .hero-stage,
+  .hero-float,
+  .hero-delay-2.hero-float {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .animate-fade-up {
